@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
 import os, sys, time, re
-from os import read, write
 
 pid = os.getpid()
 next = 0              # next character
@@ -11,7 +10,7 @@ ibuf = ""             # input buffer
 
 def main():
     while(1):
-        write(1, '$ '.encode())    
+        os.write(1, '$ '.encode())    
         args = tokenize(myReadLines()) # get user input and tokenize in one line
         if(args == []):                # if there was no input, continue to the next loop
             continue
@@ -48,7 +47,7 @@ def getChar():
     global ibuf
     if(next == limit):                  # if we are done reading 
         next = 0;
-        ibuf = read(0, 100)             # reads the next 100 bytes
+        ibuf = os.read(0, 100)             # reads the next 100 bytes
         sbuf = ibuf.decode()
         limit = len(sbuf)               # limit is the amount of characters
         if(limit == 0):                 # if there was nothing left to read
