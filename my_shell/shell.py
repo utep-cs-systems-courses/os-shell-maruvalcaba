@@ -1,17 +1,15 @@
 #! /usr/bin/env python3
 
-import os, sys, time, re
+import os, sys, time, re 
+
+from myread import myReadLines
 
 pid = os.getpid()
-next = 0              # next character
-limit = 0             # limit of buffer
-sbuf = ""             # string buffer
-ibuf = ""             # input buffer
 
 def main():
     while(1):
         os.write(1, '$ '.encode())    
-        args = tokenize(myReadLines()) # get user input and tokenize in one line
+        args = myReadLines().split() # get user input and tokenize in one line
         if(args == []):                # if there was no input, continue to the next loop
             continue
         elif args[0] == "exit":        # if command is 'exit', the shell will close
@@ -34,38 +32,7 @@ def main():
             
         else:                           # parent (forked ok)
             childPidCode = os.wait()    # waits for child process to finish
-
-
-def tokenize(string):
-    a = string.split()                  # splits the string into tokens
-    return a
         
-def getChar():
-    global sbuf
-    global next
-    global limit                        # variables needed for reading
-    global ibuf
-    if(next == limit):                  # if we are done reading 
-        next = 0;
-        ibuf = os.read(0, 100)             # reads the next 100 bytes
-        sbuf = ibuf.decode()
-        limit = len(sbuf)               # limit is the amount of characters
-        if(limit == 0):                 # if there was nothing left to read
-            return ''
-    c = sbuf[next]                      # returning the next character
-    next += 1
-    return c
-
-def myReadLines():
-    x = getChar()                       # gets character
-    line = ""
-    while(x != '\n'):                   # while next character is not a new line
-        line += x
-        x = getChar()                   # keeps on adding lines
-        if(x == ''):                    # if there is nothing left to read
-            return line
-    line += '\n'
-    return line
 
 if __name__ == "__main__":
     main()
