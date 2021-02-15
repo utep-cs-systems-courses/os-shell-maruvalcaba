@@ -30,7 +30,7 @@ def main():
                 except FileNotFoundError:             # ...expected
                     pass                              # ...fail quietly
             
-            os.write(2, ("Command not found: %s\n" % args[0]).encode())
+            os.write(2, ("%s: Command not found \n" % args[0]).encode())
             sys.exit(1)                 # terminate with error
             
         else:                           # parent (forked ok)
