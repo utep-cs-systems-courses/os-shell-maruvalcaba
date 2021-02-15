@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
 import os, sys, time, re 
-
 from myread import myReadLines
 
 pid = os.getpid()
