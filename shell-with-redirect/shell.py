@@ -1,4 +1,8 @@
 #! /usr/bin/env python3
+# Manuel Ruvalcaba
+# Theory of Operating Systems
+# Shell lab
+# This lab is a mini-shell that is supposed to mimic bash shell
 
 import os, sys, time, re 
 from myread import myReadLines
@@ -51,29 +55,6 @@ def main():
             
         else:                           # parent (forked ok)
             childPidCode = os.wait()    # waits for child process to finish
-        
-def tokenize(tokens):
-    args = []
-    inputRed = ""
-    outputRed = ""
-    i = 0
-    while(i < len(tokens)):
-        if(tokens[i][0] == '<'):
-            if(len(tokens[i]) == 1):
-                inputRed = tokens[i+1]
-                i += 1
-            else:
-                inputRed = tokens[i][1:]
-        elif(tokens[i][0] == '>'):
-            if(len(tokens[i]) == 1):
-                outputRed = tokens[i+1]
-                i += 1
-            else:
-                outputRed = tokens[i][1:]
-        else:
-            args.append(tokens[i])
-        i+=1
-    return args,inputRed,outputRed
-            
+
 if __name__ == "__main__":
     main()

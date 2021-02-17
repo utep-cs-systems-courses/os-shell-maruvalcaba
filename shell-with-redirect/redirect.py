@@ -1,5 +1,7 @@
-
-
+# Manuel Ruvalcaba
+# Theory of Operating Systems
+# Shell lab
+# This lab is a mini-shell that is supposed to mimic bash shell
 
 def hasRedirect(args):
     if "<" in args or ">" in args:
@@ -37,3 +39,27 @@ def validateRedirect(args):
     return True, inputArg, outputArg, normalArgs
             
             
+"""        
+def tokenize(tokens):
+    args = []                  is this how you do multi-line comment? keeping for now
+    inputRed = ""
+    outputRed = ""
+    i = 0
+    while(i < len(tokens)):
+        if(tokens[i][0] == '<'):
+            if(len(tokens[i]) == 1):
+                inputRed = tokens[i+1]
+                i += 1
+            else:
+                inputRed = tokens[i][1:]
+        elif(tokens[i][0] == '>'):
+            if(len(tokens[i]) == 1):
+                outputRed = tokens[i+1]
+                i += 1
+            else:
+                outputRed = tokens[i][1:]
+        else:
+            args.append(tokens[i])
+        i+=1
+    return args,inputRed,outputRed
+"""
