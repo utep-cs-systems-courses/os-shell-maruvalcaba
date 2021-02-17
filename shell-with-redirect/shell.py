@@ -2,6 +2,7 @@
 
 import os, sys, time, re 
 from myread import myReadLines
+from redirect import hasRedirect, validateRedirect
 
 pid = os.getpid()
 
@@ -12,22 +13,32 @@ def main():
         if(args == []):                # if there was no input, continue to the next loop
             continue
         elif args[0] == "exit":        # if command is 'exit', the shell will close
-            sys.exit(1)                     
+            sys.exit(1)
+        elif args[0] == "cd":
+            if(len(args) == 1):
+                os.chdir("..")
+            else:
+                os.chdir(args[1])
+            continue;
         rc = os.fork()                 # forks a child
         if rc < 0:                     # if rc is negative, fork failed
             os.write(2, ("fork failed, returning %d\n" % rc).encode())
             sys.exit(1)
         
         elif rc == 0: # if rc == 0, it is the child
-            args, inputRed, outputRed = tokenize(args)
-            if(inputRed is not ""):
-                os.close(0)
-                os.open(inputRed, os.O_RDONLY)
-                os.set_inheritable(0, True)
-            if(outputRed is not ""):
-                os.close(1)
-                os.open(outputRed, os.O_CREAT | os.O_WRONLY)
-                os.set_inheritable(1,True)
+            if(hasRedirect(args)):  
+                valid, inputRed, outputRed, args = validateRedirect(args)
+                if(valid == False):
+                    os.write(2, ("Invalid Redirect formatting. \n").encode())
+                    sys.exit(1)
+                if(inputRed is not ""):
+                    os.close(0)
+                    os.open(inputRed, os.O_RDONLY)
+                    os.set_inheritable(0, True)
+                if(outputRed is not ""):
+                    os.close(1)
+                    os.open(outputRed, os.O_CREAT | os.O_WRONLY)
+                    os.set_inheritable(1,True)
             for dir in re.split(":", os.environ['PATH']): # try each directory in the path
                 program = "%s/%s" % (dir, args[0])
                 try:
