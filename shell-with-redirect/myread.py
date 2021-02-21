@@ -25,10 +25,10 @@ def getChar():
 def myReadLines():
     x = getChar()                       # gets character
     line = ""
+    if(x == ''):
+        return line
     while(x != '\n'):                   # while next character is not a new line
         line += x
         x = getChar()                   # keeps on adding lines
-        if(x == ''):                    # if there is nothing left to read
-            return line
     line += '\n'
     return line
