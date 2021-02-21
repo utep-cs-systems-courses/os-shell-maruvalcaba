@@ -43,8 +43,8 @@ def main():
             sys.exit(1)
         
         elif rc == 0: # if rc == 0, it is the child
-            if(pipes.hasPipes(args)):
-                if(pipes.validPipes(args)):
+            if(pipes.hasPipes(args)):                 # checks if there are pipes
+                if(pipes.validPipes(args)):           # checks if pipes are valid
                     doPipes(args)
                 else:
                     os.write(2, ("Invalid Pipe formatting. \n").encode())
@@ -63,7 +63,7 @@ def main():
                     os.open(outputRed, os.O_CREAT | os.O_WRONLY)
                     os.set_inheritable(1,True)
             try:
-                os.execve(args[0], args, os.environ)
+                os.execve(args[0], args, os.environ)       # tries running in case it is full path
             except FileNotFoundError:
                 pass
             for dir in re.split(":", os.environ['PATH']): # try each directory in the path
@@ -81,7 +81,7 @@ def main():
                 childPidCode = os.wait()    # waits for child process to finish
 
             
-def doPipes(args):
+def doPipes(args):                          # runs this expanded version if there are pipes
     leftArg, rightArg = pipes.splitCommand(args)
     pr,pw = os.pipe()
     rc = os.fork()
@@ -89,7 +89,7 @@ def doPipes(args):
     if rc < 0:
         os.write(2, ("fork failed, returning %d\n" %rc).encode())
         sys.exit(1)
-    elif rc == 0:
+    elif rc == 0:                      # this child runs the left subcommand
         os.close(1)
         os.dup(pw)
         os.set_inheritable(1, True)
@@ -121,14 +121,14 @@ def doPipes(args):
             
         os.write(2, ("%s: Command not found \n" % leftArg[0]).encode())
         sys.exit(1)                 # terminate with error
-    else:
+    else:                           # parent either runs right subcommand or recursively pipes
         os.close(0)
         os.dup(pr)
         os.set_inheritable(0,True)
 
         for fd in (pr,pw):
             os.close(fd)
-        if pipes.hasPipes(rightArg):
+        if pipes.hasPipes(rightArg):  # if there are pipes
             doPipes(rightArg)
             
         if(hasRedirect(rightArg)):  
