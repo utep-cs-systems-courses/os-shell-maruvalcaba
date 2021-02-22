@@ -109,7 +109,7 @@ def doPipes(args):                          # runs this expanded version if ther
                 os.open(outputRed, os.O_CREAT | os.O_WRONLY)
                 os.set_inheritable(1,True)
         try:
-            os.execve(args[0], args, os.environ)
+            os.execve(leftArg[0], leftArg, os.environ)
         except FileNotFoundError:
             pass
         for dir in re.split(":", os.environ['PATH']): # try each directory in the path
@@ -145,7 +145,7 @@ def doPipes(args):                          # runs this expanded version if ther
                 os.open(outputRed, os.O_CREAT | os.O_WRONLY)
                 os.set_inheritable(1,True)
         try:
-            os.execve(args[0], args, os.environ)
+            os.execve(rightArg[0], rightArg, os.environ)
         except FileNotFoundError:
             pass
         for dir in re.split(":", os.environ['PATH']): # try each directory in the path
