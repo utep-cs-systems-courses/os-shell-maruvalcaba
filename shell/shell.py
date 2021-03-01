@@ -28,7 +28,10 @@ def main():
             if(len(args) == 1):
                 os.chdir("..")
             else:
-                os.chdir(args[1])
+                try:
+                    os.chdir(args[1])
+                except:
+                    os.write(2,("cd %s: No such file or directory\n"%args[1]).encode())
             continue;
         rc = os.fork()                 # forks a child
 
