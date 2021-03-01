@@ -23,7 +23,7 @@ def main():
         if(args == []):                # if there was no input, continue to the next loop
             continue
         elif args[0] == "exit":        # if command is 'exit', the shell will close
-            sys.exit(1)
+            sys.exit(0)
         elif args[0] == "cd":          # changes current directory
             if(len(args) == 1):
                 os.chdir("..")
